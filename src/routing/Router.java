@@ -44,7 +44,7 @@ public class Router {
 			@SuppressWarnings("resource")
 			BufferedReader reader = new BufferedReader(new FileReader(filename));
 			String line, lastPrefix, nextPrefix, nextHop;
-			int minPathLength, nextPathLength, nextSigbits, lastSigbits, address;
+			int minPathLength, nextPathLength, nextSigbits, lastSigbits;
 			
 			minPathLength = 0;
 			lastPrefix = "";
