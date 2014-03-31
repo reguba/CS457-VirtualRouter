@@ -2,9 +2,13 @@ package routing;
 
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.InetAddress;
 import java.util.StringTokenizer;
 
@@ -22,9 +26,11 @@ public class Router {
 		}
 		
 		String routeFilename = args[0];
-		//String ipFilename = args[1];
+		String ipFilename = args[1];
 		
 		parseRoutes(routeFilename);
+		parseIPs(ipFilename);
+		
 		
 		trie.findNextHop(881256926L);
 	}
@@ -99,6 +105,44 @@ public class Router {
 		
 	}
 	
+	private static void parseIPs(String filename){
+		try {
+			@SuppressWarnings("resource")
+			BufferedReader reader = new BufferedReader(new FileReader(filename));
+			String ip, nextIP;
+			long time1, time2, totalTime = 0;
+			int numLines=0;
+			Writer writer = null;
+			
+			writer = new BufferedWriter(new OutputStreamWriter(
+			          new FileOutputStream("results.txt"), "utf-8"));
+			    
+			while((ip = reader.readLine()) != null) {
+				numLines++;
+				time1=System.nanoTime();
+				nextIP = trie.findNextHop(pack(InetAddress.getByName(ip).getAddress()));
+				time2=System.nanoTime();
+				totalTime+=(time2-time1);
+					if (nextIP != null){
+						 writer.write(ip+"\t"+nextIP+"\n");
+					}else{
+						 writer.write(ip+"\tNoMatch\n");
+					}
+					
+			}
+			System.out.println("Average time spent on lookup: "+totalTime/numLines+"ns.");
+			
+			writer.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	private static long pack(byte[] bytes) {
 		  
 		long val = 0;
