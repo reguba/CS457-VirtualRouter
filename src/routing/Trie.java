@@ -20,13 +20,7 @@ public class Trie {
 	public void Insert(long prefix, int sigbits, String nextHop) {
 		
 		Node currentChild = root;
-		long index;
-		
-		//If sigbits is odd, pad it with an extra bit.
-		if((sigbits & 0x1) == 1) {
-			
-			sigbits++;
-		}
+		long index;		
 		
 		for(int i = 2; i <= sigbits; i += 2) {
 			
@@ -45,8 +39,44 @@ public class Trie {
 			}
 		}
 		
-		//We've reached the node we want
-		currentChild.nextHop = nextHop;
+		//If sigbits is odd, pad it with an extra bit.
+		//Since we use a stride of 2 we must fill both
+		//possible nodes this nextHop could be in
+		if((sigbits & 0x1) == 1) {
+			
+			//Get the odd bit and extra bit
+			index = (prefix >> (31 - sigbits)) & 0x3;
+			
+			//If first child doesn't exist, create it
+			if(currentChild.children[(int) index] == null) {
+				
+				currentChild.children[(int) index] = new Node();
+			}
+			
+			currentChild.children[(int) index].nextHop = nextHop;
+			
+			//Is extra bit 0 or 1?
+			if((index & 0x1) == 1) {
+				//Decrement on a 1
+				index = index - 1;
+			} else {
+				//Increment on a 0
+				index = index + 1;
+			}
+			
+			//If second child doesn't exist, create it
+			if(currentChild.children[(int) index] == null) {
+				
+				currentChild.children[(int) index] = new Node();
+			}
+			
+			currentChild.children[(int) index].nextHop = nextHop;
+			
+		} else {
+		
+			//We've reached the node we want
+			currentChild.nextHop = nextHop;
+		}
 		
 		return;
 	}

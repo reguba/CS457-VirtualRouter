@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.StringTokenizer;
 
 public class Router {
@@ -32,7 +33,12 @@ public class Router {
 		parseIPs(ipFilename);
 		
 		
-		trie.findNextHop(881256926L);
+		try {
+			trie.findNextHop(pack(InetAddress.getByName("174.182.233.168").getAddress()));
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private static void parseRoutes(String filename) {
