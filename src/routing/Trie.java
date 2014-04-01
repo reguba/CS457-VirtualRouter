@@ -93,13 +93,13 @@ public class Trie {
 		
 		Node currentChild = root;
 		String destination = null;
-		long index;
+		int index;
 		
-		for(int i = 2; i < 32; i += 2) {
+		for(int i = 2; i <= 32; i += 2) {
 			
-			index = (ip >> (32 - i)) & 0x3;
+			index = (int)((ip >> (32 - i)) & 0x3);
 			
-			currentChild = currentChild.children[(int) index];
+			currentChild = currentChild.children[index];
 			
 			//If our path ends, return the last hop address we saw
 			if(currentChild == null) {
