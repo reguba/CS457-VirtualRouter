@@ -1,6 +1,5 @@
 package routing;
 
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -13,6 +12,15 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.StringTokenizer;
 
+/**
+ * The main Router class which takes
+ * a routing file and list of IP addresses
+ * to be routed. Outputs a file named
+ * results.txt which contains all of the
+ * determined routes for each IP address.
+ * @author Eric Ostrowski, Alex Schuitema, Austin Anderson
+ *
+ */
 public class Router {
 	
 	private static Trie trie;
@@ -46,16 +54,16 @@ public class Router {
 		parseIPs(ipFilename);
 	}
 	
+	/**
+	 * Parses the given routing file and constructs
+	 * a Trie representation of it in the trie variable.
+	 * @param filename The name of the routing file.
+	 * @throws NumberFormatException If a number conversion error occurs
+	 * @throws UnknownHostException If an IP address cannot be converted to decimal form
+	 * @throws IOException If an error occurs while reading the file
+	 */
 	private static void parseRoutes(String filename) throws NumberFormatException, UnknownHostException, IOException {
-		// Read line, get prefix
-		// count AS paths and hold first prefix entry as 'best'
-		// read next line, if prefix is the same, compare AS paths
-			// if new line has shorter AS path, save it as 'best'
-		// repeat until a line with new prefix is encountered
-		// store best entry for prefix
-		// repeat above for next prefix
-				
-		@SuppressWarnings("resource")
+
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		String line, lastPrefix, nextPrefix, nextHop;
 		int minPathLength, nextPathLength, nextSigbits, lastSigbits;
@@ -98,9 +106,15 @@ public class Router {
 		}
 		
 		trie.Insert(pack(InetAddress.getByName(lastPrefix).getAddress()), lastSigbits, nextHop);
-	
+		reader.close();
 	}
 	
+	/**
+	 * Parses the file containing a list of IPs to be
+	 * routed and places determined routs into a file
+	 * named results.txt in the project directory.
+	 * @param filename The name of the IP file.
+	 */
 	private static void parseIPs(String filename){
 		try {
 			@SuppressWarnings("resource")
@@ -140,6 +154,12 @@ public class Router {
 		}
 		
 	}
+	
+	/**
+	 * Converts and array of bytes into a long value.
+	 * @param bytes The array of bytes to convert.
+	 * @return The long value represented by the array of bytes.
+	 */
 	private static long pack(byte[] bytes) {
 		  
 		long val = 0;

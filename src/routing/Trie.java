@@ -1,9 +1,18 @@
 package routing;
 
+/**
+ * A basic Trie data structure.
+ * @author Eric Ostrowski, Alex Schuitema, Austin Anderson
+ *
+ */
+
 public class Trie {
 
 	private Node root;
 	
+	/*
+	 * Creates a new Trie.
+	 */
 	public Trie() {
 		
 		root = new Node();
@@ -119,6 +128,9 @@ public class Trie {
 		return destination;
 	}
 	
+	/**
+	 * Node structure used within the Trie.
+	 */
 	private class Node {
 		
 		public Node[] children;
